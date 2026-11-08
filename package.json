@@ -7,9 +7,9 @@
     "dev": "vite --host 127.0.0.1 --configLoader runner",
     "build": "vite build --configLoader runner",
     "preview": "vite preview --host 127.0.0.1 --configLoader runner",
-    "test": "node --test src/utils/*.test.js",
-    "format": "prettier --write src index.html vite.config.js package.json .prettierrc.json",
-    "format:check": "prettier --check src index.html vite.config.js package.json .prettierrc.json"
+    "test": "node --test src/utils/*.test.js server/*.test.js",
+    "format": "prettier --write src server index.html vite.config.js package.json .prettierrc.json",
+    "format:check": "prettier --check src server index.html vite.config.js package.json .prettierrc.json"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

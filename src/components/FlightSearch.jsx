@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ArrowLeftRight, ArrowRight, Search, Info } from 'lucide-react';
-import { airports } from '../data/destinations';
+import { airportGroups } from '../data/destinations';
+import { cabinLayouts } from '../data/flights';
 import { dateAfter, validateSearch } from '../utils/search';
 function FlightSearch({ values, onChange, onSubmit }) {
   const [error, setError] = useState('');
@@ -18,13 +19,20 @@ function FlightSearch({ values, onChange, onSubmit }) {
     setError(message);
     if (!message) onSubmit({ ...values });
   }
-  const airportOptions = airports.map((airport) => (
-    <option
-      key={airport.code}
-      value={airport.code}
+  const airportOptions = airportGroups.map((group) => (
+    <optgroup
+      key={group.label}
+      label={group.label}
     >
-      {airport.name} ({airport.code})
-    </option>
+      {group.airports.map((airport) => (
+        <option
+          key={airport.code}
+          value={airport.code}
+        >
+          {airport.name} ({airport.code})
+        </option>
+      ))}
+    </optgroup>
   ));
   return (
     <form
@@ -143,10 +151,9 @@ function FlightSearch({ values, onChange, onSubmit }) {
               value={values.cabin}
               onChange={handleChange}
             >
-              <option>일반석</option>
-              <option>프리미엄 일반석</option>
-              <option>비즈니스석</option>
-              <option>일등석</option>
+              {Object.keys(cabinLayouts).map((cabin) => (
+                <option key={cabin}>{cabin}</option>
+              ))}
             </select>
           </label>
         </div>
@@ -177,8 +184,8 @@ function FlightSearch({ values, onChange, onSubmit }) {
         </p>
       )}
       <p className="demoNote">
-        <Info size={14} /> 예시 항공편으로 검색부터 예약까지 체험해 보세요. 실제
-        항공권 발급·결제는 제공되지 않습니다.
+        <Info size={14} /> 실제 항공편과 조회 운임을 검색할 수 있어요. 좌석
+        선택과 결제는 모의 환경에서 진행됩니다.
       </p>
     </form>
   );

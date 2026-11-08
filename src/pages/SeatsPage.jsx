@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useBooking } from '../BookingContext';
 import { BookingSteps, PageTitle, TripSummary } from '../components/BookingUI';
-import { occupiedSeats } from '../data/flights';
+import { cabinLayouts } from '../data/flights';
 function SeatsPage() {
   const { draft, setDraft } = useBooking();
   const navigate = useNavigate();
@@ -14,6 +14,14 @@ function SeatsPage() {
   const [now, setNow] = useState(Date.now());
   const [error, setError] = useState('');
   const [conflict, setConflict] = useState(false);
+  const cabin = draft.search.cabin;
+  const layout = cabinLayouts[cabin];
+  const columns = layout.groups.flatMap((group, index) =>
+    [...group].map((letter, position) => ({
+      letter,
+      aisle: index > 0 && position === 0,
+    })),
+  );
   useEffect(() => {
     setDraft((prev) => ({ ...prev, seats, holdUntil: until }));
   }, [seats, until, setDraft]);
@@ -63,9 +71,9 @@ function SeatsPage() {
   return (
     <div className="container flowPage">
       <BookingSteps current={2} />
-      <PageTitle title="편안한 자리를 골라보세요.">
-        좌석은 선택 순서대로 탑승객에게 배정됩니다. 왕복은 각 구간의 좌석을
-        선택해 주세요.
+      <PageTitle title={`${cabin} 좌석을 골라보세요.`}>
+        검색에서 선택한 등급의 모의 좌석입니다. 왕복은 가는 편과 오는 편의
+        좌석을 각각 선택해 주세요.
       </PageTitle>
       <div className="checkoutGrid">
         <div className="formStack">
@@ -95,6 +103,25 @@ function SeatsPage() {
             </div>
           )}
           <section className="whitePanel">
+            <ul
+              className="seatCabinGrades"
+              aria-label="좌석 등급"
+            >
+              {Object.keys(cabinLayouts).map((name) => (
+                <li
+                  key={name}
+                  aria-current={name === cabin ? 'true' : undefined}
+                >
+                  {name}
+                </li>
+              ))}
+            </ul>
+            <Link
+              className="textLink"
+              to="/"
+            >
+              검색에서 좌석 등급 변경
+            </Link>
             <div className="segmented">
               {legs.map((key) => (
                 <button
@@ -114,32 +141,40 @@ function SeatsPage() {
             </div>
             <div className="planeCabin">
               <p>항공기 앞쪽 ↑</p>
-              <div className="seatMap">
-                {Array.from({ length: 8 }, (_, row) => (
-                  <div
-                    className="seatRow"
-                    key={row}
-                  >
-                    <small>{row + 1}</small>
-                    {['A', 'B', 'C', 'D', 'E', 'F'].map((letter) => {
-                      const seat = `${row + 1}${letter}`;
-                      const taken = occupiedSeats.includes(seat);
-                      return (
-                        <button
-                          type="button"
-                          key={seat}
-                          disabled={taken || !seconds}
-                          aria-label={`${seat}${taken ? ' 예약 완료' : ''}`}
-                          aria-pressed={seats[leg].includes(seat)}
-                          className={`seat ${letter === 'D' ? 'aisle' : ''} ${seats[leg].includes(seat) ? 'selected' : ''}`}
-                          onClick={() => select(seat)}
-                        >
-                          {seat}
-                        </button>
-                      );
-                    })}
-                  </div>
-                ))}
+              <div
+                className="seatMap"
+                role="group"
+                aria-label={`${cabin} 모의 좌석`}
+              >
+                {Array.from({ length: layout.rowCount }, (_, index) => {
+                  const row = layout.firstRow + index;
+                  return (
+                    <div
+                      className="seatRow"
+                      key={row}
+                    >
+                      <small>{row}</small>
+                      {columns.map(({ letter, aisle }) => {
+                        const seat = `${row}${letter}`;
+                        const taken = layout.occupied.includes(seat);
+                        const selected = seats[leg].includes(seat);
+                        return (
+                          <button
+                            type="button"
+                            key={seat}
+                            disabled={taken || !seconds}
+                            aria-label={`${seat}${taken ? ' 예약 완료' : ''}`}
+                            aria-pressed={selected}
+                            className={`seat ${aisle ? 'aisle' : ''} ${selected ? 'selected' : ''}`}
+                            onClick={() => select(seat)}
+                          >
+                            {seat}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <ul className="assignmentList">

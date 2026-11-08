@@ -1,3 +1,5 @@
+import { isDomesticRoute } from './destinations.js';
+
 export const initialFlights = [
   {
     id: 'AW101',
@@ -30,12 +32,34 @@ export const initialFlights = [
     available: true,
   },
 ];
-export const occupiedSeats = ['1A', '2B', '3C', '4D', '5A', '6F'];
+export const cabinLayouts = {
+  일반석: {
+    firstRow: 13,
+    rowCount: 8,
+    groups: ['ABC', 'DEF'],
+    occupied: ['13A', '14B', '15C', '16D', '17A', '18F'],
+  },
+  '프리미엄 일반석': {
+    firstRow: 10,
+    rowCount: 3,
+    groups: ['AC', 'DF'],
+    occupied: ['10A'],
+  },
+  비즈니스석: {
+    firstRow: 7,
+    rowCount: 3,
+    groups: ['A', 'DE', 'F'],
+    occupied: ['7A'],
+  },
+  일등석: {
+    firstRow: 1,
+    rowCount: 6,
+    groups: ['A', 'F'],
+    occupied: ['1A'],
+  },
+};
 export function flightForRoute(flight, search) {
-  const domestic =
-    ['ICN', 'GMP', 'PUS', 'CJU'].includes(search.from) &&
-    ['ICN', 'GMP', 'PUS', 'CJU'].includes(search.to);
-  if (domestic) return { ...flight };
+  if (isDomesticRoute(search)) return { ...flight };
   const hour = Number(flight.time.slice(0, 2));
   return {
     ...flight,

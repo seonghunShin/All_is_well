@@ -49,7 +49,8 @@ export function BookingDetail({ complete = false }) {
         </h2>
         <p>
           {booking.search.depart} · {booking.outbound.airline}{' '}
-          {booking.outbound.id} · {booking.outbound.time}
+          {booking.outbound.id} · {booking.outbound.time} ·{' '}
+          {booking.search.cabin}
         </p>
         {booking.inbound && (
           <p>
@@ -73,7 +74,9 @@ export function BookingDetail({ complete = false }) {
         <hr />
         <div className="reviewRow">
           <span>총 결제 금액 (체험)</span>
-          <strong className="price">{money(booking.total)}</strong>
+          <strong className="price">
+            {money(booking.total, booking.quote?.currency)}
+          </strong>
         </div>
         <p className="muted">
           {booking.status === '취소 완료'
@@ -191,7 +194,7 @@ function BookingsPage() {
                   {booking.id}
                 </p>
               </div>
-              <strong>{money(booking.total)} →</strong>
+              <strong>{money(booking.total, booking.quote?.currency)} →</strong>
             </Link>
           ))}
         </div>

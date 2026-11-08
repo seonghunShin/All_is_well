@@ -14,11 +14,14 @@ import FlightSearch from '../components/FlightSearch';
 
 import { destinations } from '../data/destinations';
 import { dateAfter } from '../utils/search';
+
+const defaultDeparture = 'GMP';
+
 function HomePage() {
   const { draft, setDraft } = useBooking();
   const [values, setValues] = useState(() => ({
     trip: 'round',
-    from: 'ICN',
+    from: defaultDeparture,
     to: 'CJU',
     depart: dateAfter(7),
     returnDate: dateAfter(10),
@@ -36,7 +39,7 @@ function HomePage() {
     setValues((prev) => ({
       ...prev,
       to: code,
-      from: prev.from === code ? 'ICN' : prev.from,
+      from: prev.from === code ? defaultDeparture : prev.from,
     }));
     document
       .getElementById('search')
@@ -182,7 +185,7 @@ function HomePage() {
             <span>03</span>
             <div>
               <h3>항공편을 고르고 예약해요.</h3>
-              <p>예시 항공편을 선택하고 좌석·결제까지 체험해 보세요.</p>
+              <p>조회한 항공편을 선택하고 가상 좌석과 결제를 체험해 보세요.</p>
             </div>
           </li>
         </ol>

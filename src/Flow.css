@@ -225,6 +225,11 @@
 .flightPrice strong {
   font-size: 23px;
 }
+.flightPriceAmount {
+  display: grid;
+  gap: 3px;
+  text-align: right;
+}
 .flightPrice small {
   color: #7b8a80;
   font-size: 11px;
@@ -246,6 +251,18 @@
   font-size: 13px;
   color: #657d6e;
   margin: 10px 0;
+}
+.flightSegments {
+  padding-left: 22px;
+}
+.flightSegments li {
+  padding: 10px 0;
+}
+.flightSegments li + li {
+  border-top: 1px solid #e1eae4;
+}
+.flightSegments p {
+  margin: 4px 0 0;
 }
 .emptyPanel {
   text-align: center;
@@ -349,6 +366,26 @@ hr {
   background: #147968;
   color: white;
   border-color: #147968;
+}
+.seatCabinGrades {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0 0 20px;
+  list-style: none;
+}
+.seatCabinGrades li {
+  border-radius: 20px;
+  background: #f3f6f4;
+  color: #57675e;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+.seatCabinGrades li[aria-current] {
+  background: #147968;
+  color: white;
+  font-weight: 700;
 }
 .seatLegend {
   display: flex;
@@ -751,8 +788,8 @@ td .secondary {
     border-top: 1px solid #e3ebe6;
     padding-top: 15px;
   }
-  .flightPrice small {
-    display: none;
+  .flightPriceAmount {
+    text-align: left;
   }
   .header .headerInner {
     gap: 22px;

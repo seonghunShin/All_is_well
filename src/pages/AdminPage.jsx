@@ -189,7 +189,7 @@ function AdminPage({ mode = 'dashboard' }) {
                   <th>항공편</th>
                   <th>출발 시간</th>
                   <th>일반석 기본 운임</th>
-                  <th>좌석 현황</th>
+                  <th>일반석 좌석 예시</th>
                   <th>판매 상태</th>
                   <th>관리</th>
                 </tr>
@@ -316,7 +316,7 @@ function AdminPage({ mode = 'dashboard' }) {
                       <br />
                       {item.search.depart}
                     </td>
-                    <td>{money(item.total)}</td>
+                    <td>{money(item.total, item.quote?.currency)}</td>
                     <td>{item.status}</td>
                     <td>
                       {item.status === '예약 완료' && (

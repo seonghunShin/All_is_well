@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useBooking } from '../BookingContext';
 import { BookingSteps, PageTitle, TripSummary } from '../components/BookingUI';
+import { isDomesticRoute } from '../data/destinations';
 import { validPassengers } from '../utils/booking';
 import { dateAfter } from '../utils/search';
 function PassengersPage() {
@@ -19,8 +20,10 @@ function PassengersPage() {
   const [phone, setPhone] = useState(draft.contact?.phone || '');
   const [error, setError] = useState('');
   const international =
-    !['ICN', 'GMP', 'PUS', 'CJU'].includes(draft.search.from) ||
-    !['ICN', 'GMP', 'PUS', 'CJU'].includes(draft.search.to);
+    !isDomesticRoute(draft.search) ||
+    [draft.outbound, draft.inbound].some(
+      (flight) => flight?.segments?.length && !isDomesticRoute(flight),
+    );
   function update(index, field, value) {
     setPeople((prev) =>
       prev.map((person, i) =>

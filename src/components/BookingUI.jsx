@@ -106,6 +106,8 @@ export function TripSummary() {
       {draft.outbound && (
         <p>
           {draft.outbound.airline} · {draft.outbound.time}
+          {draft.outbound.quote &&
+            ` · ${money(draft.outbound.quote.amount, draft.outbound.quote.currency)}`}
         </p>
       )}
       {draft.inbound && (
@@ -115,16 +117,20 @@ export function TripSummary() {
           </p>
           <p>
             {draft.inbound.airline} · {draft.inbound.time}
+            {draft.inbound.quote &&
+              ` · ${money(draft.inbound.quote.amount, draft.inbound.quote.currency)}`}
           </p>
         </>
       )}
       <hr />
       <p>
         총 예상 금액{' '}
-        <strong className="price">{money(totalPrice(draft))}</strong>
+        <strong className="price">
+          {money(totalPrice(draft), draft.quote?.currency)}
+        </strong>
       </p>
       <small>
-        세금 포함 · 예시 운임
+        {draft.quote ? '조회 당시 운임 · 모의 예약' : '세금 포함 · 예시 운임'}
         <br />
         선택 좌석 추가 요금 없음
       </small>

@@ -149,7 +149,7 @@ function PaymentPage() {
             >
               {busy
                 ? '예시 결제 처리 중…'
-                : `${money(totalPrice(draft))} 체험 결제`}
+                : `${money(totalPrice(draft), draft.quote?.currency)} 체험 결제`}
             </button>
           </div>
         </form>
